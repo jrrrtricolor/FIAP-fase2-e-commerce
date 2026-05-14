@@ -16,6 +16,11 @@ env/
 # Notebooks
 .ipynb_checkpoints/
 
+# Data artifacts
+data/raw/
+data/interim/
+data/processed/
+
 # OS and editor files
 .DS_Store
 .idea/
