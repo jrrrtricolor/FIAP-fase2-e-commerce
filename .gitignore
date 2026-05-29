@@ -24,6 +24,10 @@ data/*.db
 data/*.sqlite
 data/*.sqlite3
 
+# Experiment tracking
+mlruns/
+mlflow.db
+
 # OS and editor files
 .DS_Store
 .idea/
