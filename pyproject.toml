@@ -7,3 +7,38 @@ select = ["E", "F"]
 
 [tool.ruff.lint.per-file-ignores]
 "notebooks/*.ipynb" = ["E402", "E501"]
+
+[project]
+name = "fiap-fase2-ecommerce-recommender"
+version = "0.1.0"
+description = "Sistema de recomendação de produtos para e-commerce baseado no comportamento de usuários, desenvolvido para o Tech Challenge Fase 2 da FIAP."
+authors = [
+    {name = "Cassio Junior", email = "jrrrtricolor@gmail.com"},
+    {name = "Júlia Otranto Aulicino"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pandas (>=3.0.3,<4.0.0)",
+    "numpy (>=2.4.6,<3.0.0)",
+    "scikit-learn (>=1.8.0,<2.0.0)",
+    "matplotlib (>=3.10.9,<4.0.0)",
+    "kagglehub (>=1.0.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.15.15,<0.16.0)",
+    "ipykernel (>=7.2.0,<8.0.0)",
+    "jupyterlab (>=4.5.7,<5.0.0)"
+]
+
+[tool.poetry]
+packages = [
+    { include = "ml_prep_kit", from = "ml_prep_kit/src" }
+]
