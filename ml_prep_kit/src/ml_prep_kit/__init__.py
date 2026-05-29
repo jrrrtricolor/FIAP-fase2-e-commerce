@@ -4,6 +4,7 @@ from ml_prep_kit.csv_data_loader import CSVDataLoader
 from ml_prep_kit.data_validator import DataValidator
 from ml_prep_kit.experiment_tracker import ExperimentTracker
 from ml_prep_kit.feature_preprocessor import FeaturePreprocessor
+from ml_prep_kit.model_evaluator import ModelEvaluator
 from ml_prep_kit.model_factory import ModelFactory
 from ml_prep_kit.sqlite_dataframe_store import SQLiteDataFrameStore
 from ml_prep_kit.utils import format_currency, format_percent
@@ -14,6 +15,7 @@ __all__ = [
     "DataValidator",
     "ExperimentTracker",
     "FeaturePreprocessor",
+    "ModelEvaluator",
     "ModelFactory",
     "SQLiteDataFrameStore",
     "VisualizationReporter",
