@@ -71,7 +71,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Calcular métricas de classificação.
 - [x] Treinar modelos iniciais com uma amostra da base.
 - [ ] Definir a estratégia final de recomendação.
-- [ ] Implementar o modelo principal com PyTorch.
+- [x] Implementar o modelo principal com PyTorch.
 - [ ] Fixar seeds de forma consistente.
 - [ ] Salvar ou registrar o melhor modelo final.
 - [ ] Documentar as métricas escolhidas e suas justificativas.
@@ -84,7 +84,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Registrar métricas.
 - [x] Registrar modelos Scikit-Learn.
 - [x] Configurar o tracking local com SQLite.
-- [ ] Registrar o modelo PyTorch.
+- [x] Registrar o modelo PyTorch.
 - [ ] Usar o MLflow Model Registry.
 - [ ] Promover o melhor modelo para Production ou alias equivalente.
 - [ ] Documentar como abrir a interface do MLflow.
@@ -141,16 +141,15 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 | Reprodutibilidade | 15% | Em andamento |
 | Docker | 15% | Pendente |
 | Pipeline DVC | 15% | Pendente |
-| Rede neural com PyTorch | 15% | Pendente |
+| Rede neural com PyTorch | 15% | Em andamento |
 | MLflow e Model Registry | 10% | Em andamento |
 | Vídeo STAR | 10% | Pendente |
 | Bônus de deploy em cloud | 5% | Opcional |
 
 ## Próximos passos recomendados
 
-1. Implementar o modelo principal com PyTorch.
-2. Registrar o modelo PyTorch no MLflow.
-3. Criar o pipeline DVC com pelo menos três stages.
-4. Criar o Dockerfile e validar a execução em container.
-5. Atualizar o README e criar o Model Card.
-6. Preparar o roteiro do vídeo STAR.
+1. Comparar o modelo PyTorch com os baselines no MLflow.
+2. Criar o pipeline DVC com pelo menos três stages.
+3. Criar o Dockerfile e validar a execução em container.
+4. Atualizar o README e criar o Model Card.
+5. Preparar o roteiro do vídeo STAR.
