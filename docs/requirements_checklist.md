@@ -40,6 +40,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Configurar os pacotes locais `ml_prep_kit` e `ecommerce_recommender`.
 - [x] Separar dependências principais e dependências de desenvolvimento.
 - [x] Garantir que o projeto rode com `poetry run`.
+- [x] Adicionar PyTorch como dependência principal do projeto.
 - [ ] Documentar a instalação com Poetry no README.
 - [ ] Documentar os principais comandos de execução.
 
@@ -49,6 +50,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Rodar `poetry run ruff check .` com sucesso.
 - [x] Usar nomes descritivos nos principais componentes.
 - [x] Usar type hints nos módulos principais.
+- [x] Criar logging estruturado reutilizável no `ml_prep_kit`.
 - [ ] Revisar docstrings públicas no padrão Google.
 - [ ] Garantir que o código final não tenha duplicações relevantes.
 - [ ] Garantir que funções e classes tenham responsabilidades claras.
@@ -57,6 +59,9 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 
 - [x] Criar testes para `ModelFactory`.
 - [x] Criar testes para `ModelEvaluator`.
+- [x] Criar testes para o classificador PyTorch tabular.
+- [x] Criar testes para o classificador PyTorch com interface Scikit-Learn.
+- [x] Criar testes para logging estruturado.
 - [x] Rodar os testes do `ml_prep_kit` com Poetry.
 - [ ] Criar testes para `ExperimentTracker`, usando mocks ou um ambiente local
       controlado.
@@ -71,8 +76,11 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Calcular métricas de classificação.
 - [x] Treinar modelos iniciais com uma amostra da base.
 - [ ] Definir a estratégia final de recomendação.
+- [x] Criar uma rede neural tabular reutilizável no `ml_prep_kit`.
+- [x] Criar um classificador PyTorch reutilizável com interface semelhante ao
+      Scikit-Learn.
 - [x] Implementar o modelo principal com PyTorch.
-- [ ] Fixar seeds de forma consistente.
+- [x] Fixar seeds de forma consistente.
 - [ ] Salvar ou registrar o melhor modelo final.
 - [ ] Documentar as métricas escolhidas e suas justificativas.
 
