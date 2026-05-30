@@ -1,7 +1,7 @@
 """Utilitários para leitura e gravação em SQLite."""
 
-from pathlib import Path
 import sqlite3
+from pathlib import Path
 
 import pandas as pd
 

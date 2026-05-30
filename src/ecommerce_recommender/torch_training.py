@@ -33,7 +33,6 @@ from ml_prep_kit import (
     StructuredLoggingConfigurator,
 )
 
-
 LOGGER = logging.getLogger("ecommerce_recommender.torch_training")
 
 

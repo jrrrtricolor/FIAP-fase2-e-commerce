@@ -1,8 +1,7 @@
 """Formatador reutilizável para logs estruturados em JSON."""
 
-import logging
 import json
-
+import logging
 
 CAMPOS_TECNICOS = {
     "args",

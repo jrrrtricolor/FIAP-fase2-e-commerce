@@ -10,7 +10,6 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from ml_prep_kit.tabular_binary_classifier import TabularBinaryClassifier
 
-
 logger = logging.getLogger(__name__)
 
 

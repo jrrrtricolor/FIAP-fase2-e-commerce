@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+import logging
 import sqlite3
+from pathlib import Path
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -13,9 +14,10 @@ from ml_prep_kit import (
     FeaturePreprocessor,
     ModelEvaluator,
     ModelFactory,
+    StructuredLoggingConfigurator,
 )
 
-
+LOGGER = logging.getLogger("ecommerce_recommender.training")
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATABASE_PATH = PROJECT_ROOT / "data" / "training_data.db"
 MLFLOW_TRACKING_URI = f"sqlite:///{PROJECT_ROOT / 'mlflow.db'}"
@@ -100,18 +102,45 @@ MODEL_CONFIGS = [
 ]
 
 
-def main() -> None:
-    """Executa o treino dos modelos configurados."""
-    data = load_training_sample(
+def run_training() -> None:
+    """Executa o treino dos modelos clássicos e registra no MLflow.
+
+    Este fluxo treina modelos tradicionais de Machine Learning para criar
+    baselines de comparação. O resultado de cada modelo é avaliado e salvo no
+    MLflow com os parâmetros usados no experimento.
+
+    Exemplo:
+        run_training()
+    """
+    StructuredLoggingConfigurator.configure()
+
+    LOGGER.info(
+        "Iniciando treino dos modelos clássicos.",
+        extra={
+            "evento": "treino_modelos_classicos_iniciado",
+            "tamanho_amostra": SAMPLE_SIZE,
+            "taxa_positivos": POSITIVE_RATE,
+        },
+    )
+
+    dados = load_training_sample(
         database_path=DATABASE_PATH,
         sample_size=SAMPLE_SIZE,
         positive_rate=POSITIVE_RATE,
         random_state=RANDOM_SEED,
     )
 
-    X = data[FEATURE_COLUMNS]
-    y = data[TARGET_COLUMN]
+    X = dados[FEATURE_COLUMNS]
+    y = dados[TARGET_COLUMN]
 
+    LOGGER.info(
+        "Separando amostra entre treino e validação.",
+        extra={
+            "evento": "divisao_treino_validacao_iniciada",
+            "linhas": len(dados),
+            "features": len(FEATURE_COLUMNS),
+        },
+    )
     X_train, X_valid, y_train, y_valid = train_test_split(
         X,
         y,
@@ -139,7 +168,7 @@ def main() -> None:
             X_valid=X_valid,
             y_train=y_train,
             y_valid=y_valid,
-            sample_size=len(data),
+            sample_size=len(dados),
             target_rate=float(y.mean()),
             random_seed=RANDOM_SEED,
         )
@@ -150,8 +179,25 @@ def main() -> None:
         ascending=False,
     )
 
+    LOGGER.info(
+        "Treino dos modelos clássicos concluído.",
+        extra={
+            "evento": "treino_modelos_classicos_concluido",
+            "modelos_treinados": len(results),
+        },
+    )
+
     print("\nResultados registrados no MLflow:")
     print(report.to_string(index=False))
+
+
+def main() -> None:
+    """Executa o treino clássico pelo comando direto do módulo.
+
+    Exemplo:
+        poetry run python -m ecommerce_recommender.training
+    """
+    run_training()
 
 
 def load_training_sample(
@@ -160,7 +206,19 @@ def load_training_sample(
     positive_rate: float,
     random_state: int,
 ) -> pd.DataFrame:
-    """Carrega uma amostra estratificada da tabela de treino."""
+    """Carrega uma amostra balanceada a partir da base SQLite.
+
+    A amostra usa uma quantidade controlada de exemplos positivos e negativos
+    para evitar que o treino fique dominado pela classe majoritária.
+
+    Exemplo:
+        dados = load_training_sample(
+            database_path=DATABASE_PATH,
+            sample_size=50_000,
+            positive_rate=0.2,
+            random_state=42,
+        )
+    """
     positive_size = int(sample_size * positive_rate)
     negative_size = sample_size - positive_size
     columns = ", ".join(SELECTED_COLUMNS)
@@ -204,9 +262,35 @@ def train_and_log_model(
     target_rate: float,
     random_seed: int,
 ) -> dict[str, float | str]:
-    """Treina, avalia e registra um modelo no MLflow."""
+    """Treina, avalia e registra um modelo clássico no MLflow.
+
+    Esta função concentra o ciclo de um modelo: cria o pipeline, treina com os
+    dados de treino, calcula métricas na validação e registra tudo no MLflow.
+
+    Exemplo:
+        resultado = train_and_log_model(
+            config=config,
+            factory=factory,
+            evaluator=evaluator,
+            tracker=tracker,
+            X_train=X_train,
+            X_valid=X_valid,
+            y_train=y_train,
+            y_valid=y_valid,
+            sample_size=len(dados),
+            target_rate=float(y.mean()),
+            random_seed=42,
+        )
+    """
     model_name = config["model_name"]
-    print(f"\nTreinando modelo: {model_name}")
+    LOGGER.info(
+        "Treinando modelo clássico.",
+        extra={
+            "evento": "treino_modelo_classico_iniciado",
+            "nome_modelo": model_name,
+        },
+    )
+
     preprocessor = FeaturePreprocessor(
         numeric_columns=NUMERIC_COLUMNS,
         categorical_columns=CATEGORICAL_COLUMNS,
@@ -243,6 +327,16 @@ def train_and_log_model(
         metrics=metrics,
     )
 
+    LOGGER.info(
+        "Modelo clássico registrado no MLflow.",
+        extra={
+            "evento": "treino_modelo_classico_concluido",
+            "nome_modelo": model_name,
+            "execucao_id": run_id,
+            "metricas": metrics,
+        },
+    )
+
     return {
         "model_name": model_name,
         "run_id": run_id,
@@ -255,7 +349,15 @@ def get_positive_score(
     X_valid: pd.DataFrame,
     y_pred: pd.Series,
 ) -> pd.Series:
-    """Obtém score da classe positiva quando o modelo oferece essa saída."""
+    """Obtém o score usado para avaliar a classe positiva.
+
+    O ideal é usar ``predict_proba``. Quando o modelo não oferece
+    probabilidade, usamos ``decision_function``. Se nenhuma das duas saídas
+    existir, usamos a própria predição como aproximação simples.
+
+    Exemplo:
+        y_score = get_positive_score(pipeline, X_valid, y_pred)
+    """
     if hasattr(pipeline, "predict_proba"):
         probabilities = pipeline.predict_proba(X_valid)
         return pd.Series(probabilities[:, 1], index=y_pred.index)

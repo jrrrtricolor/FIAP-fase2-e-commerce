@@ -3,10 +3,14 @@ line-length = 79
 target-version = "py313"
 
 [tool.ruff.lint]
-select = ["E", "F"]
+select = ["E", "F", "I", "N", "UP"]
+ignore = [
+    "N803", # Mantém X e y em métodos compatíveis com o padrão Scikit-Learn.
+    "N806", # Mantém X_train/X_valid em fluxos de treino de Machine Learning.
+]
 
 [tool.ruff.lint.per-file-ignores]
-"notebooks/*.ipynb" = ["E402", "E501"]
+"notebooks/*.ipynb" = ["E402", "E501", "I001"]
 "ml_prep_kit/__init__.py" = ["E402"]
 
 [project]

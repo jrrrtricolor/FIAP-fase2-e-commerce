@@ -4,8 +4,9 @@ import logging
 import unittest
 from io import StringIO
 
-from ml_prep_kit import StructuredLoggingConfigurator
 from ml_prep_kit.structured_json_formatter import StructuredJsonFormatter
+
+from ml_prep_kit import StructuredLoggingConfigurator
 
 
 class StructuredLoggingConfiguratorTest(unittest.TestCase):

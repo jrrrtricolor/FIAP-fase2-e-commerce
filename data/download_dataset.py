@@ -3,7 +3,6 @@ from shutil import copy2
 
 import kagglehub
 
-
 DATASET_NAME = "psparks/instacart-market-basket-analysis"
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw" / "instacart"

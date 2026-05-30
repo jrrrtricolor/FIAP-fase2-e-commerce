@@ -8,7 +8,6 @@ import mlflow
 import mlflow.pytorch
 import mlflow.sklearn
 
-
 logger = logging.getLogger(__name__)
 
 

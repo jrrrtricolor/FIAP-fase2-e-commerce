@@ -7,7 +7,6 @@ import torch
 
 from ml_prep_kit import StructuredLoggingConfigurator, TabularBinaryClassifier
 
-
 logger = logging.getLogger(__name__)
 
 

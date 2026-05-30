@@ -10,7 +10,6 @@ from ml_prep_kit import (
     StructuredLoggingConfigurator,
 )
 
-
 logger = logging.getLogger(__name__)
 
 
