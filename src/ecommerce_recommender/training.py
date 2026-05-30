@@ -21,7 +21,7 @@ DATABASE_PATH = PROJECT_ROOT / "data" / "training_data.db"
 MLFLOW_TRACKING_URI = f"sqlite:///{PROJECT_ROOT / 'mlflow.db'}"
 MLFLOW_EXPERIMENT_NAME = "tech-challenge-fase2-recommendation"
 TABLE_NAME = "training_data"
-RANDOM_STATE = 42
+RANDOM_SEED = 42
 SAMPLE_SIZE = 50_000
 POSITIVE_RATE = 0.2
 TEST_SIZE = 0.25
@@ -106,7 +106,7 @@ def main() -> None:
         database_path=DATABASE_PATH,
         sample_size=SAMPLE_SIZE,
         positive_rate=POSITIVE_RATE,
-        random_state=RANDOM_STATE,
+        random_state=RANDOM_SEED,
     )
 
     X = data[FEATURE_COLUMNS]
@@ -116,7 +116,7 @@ def main() -> None:
         X,
         y,
         test_size=TEST_SIZE,
-        random_state=RANDOM_STATE,
+        random_state=RANDOM_SEED,
         stratify=y,
     )
 
@@ -126,7 +126,7 @@ def main() -> None:
         tracking_uri=MLFLOW_TRACKING_URI,
     )
 
-    factory = ModelFactory(random_state=RANDOM_STATE)
+    factory = ModelFactory(random_state=RANDOM_SEED)
     results = []
 
     for config in MODEL_CONFIGS:
@@ -141,7 +141,7 @@ def main() -> None:
             y_valid=y_valid,
             sample_size=len(data),
             target_rate=float(y.mean()),
-            random_state=RANDOM_STATE,
+            random_seed=RANDOM_SEED,
         )
         results.append(result)
 
@@ -202,7 +202,7 @@ def train_and_log_model(
     y_valid: pd.Series,
     sample_size: int,
     target_rate: float,
-    random_state: int,
+    random_seed: int,
 ) -> dict[str, float | str]:
     """Treina, avalia e registra um modelo no MLflow."""
     model_name = config["model_name"]
@@ -231,7 +231,7 @@ def train_and_log_model(
         "problem_type": config["problem_type"],
         "sample_size": sample_size,
         "target_rate": target_rate,
-        "random_state": random_state,
+        "random_seed": random_seed,
         "feature_count": len(FEATURE_COLUMNS),
         **config["parameters"],
     }
