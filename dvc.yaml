@@ -6,6 +6,16 @@ stages:
     outs:
       - data/raw/instacart
 
+  prepare_data:
+    cmd: poetry run python -m ecommerce_recommender.prepare_data
+    deps:
+      - data/raw/instacart
+      - data/reference/estimated_market_prices.csv
+      - src/ecommerce_recommender/prepare_data.py
+      - ml_prep_kit/src/ml_prep_kit/sqlite_dataframe_store.py
+    outs:
+      - data/training_data.db
+
   train_models:
     cmd: poetry run python -m ecommerce_recommender.main
     deps:
