@@ -1,0 +1,19 @@
+name: Docker Build
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  docker:
+    name: Build da imagem Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Construir imagem
+        run: make docker-build
