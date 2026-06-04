@@ -1,0 +1,19 @@
+stages:
+  download_dataset:
+    cmd: poetry run python data/download_dataset.py
+    deps:
+      - data/download_dataset.py
+    outs:
+      - data/raw/instacart
+
+  train_models:
+    cmd: poetry run python -m ecommerce_recommender.main
+    deps:
+      - data/training_data.db
+      - src/ecommerce_recommender
+      - ml_prep_kit/src/ml_prep_kit
+    outs:
+      - mlflow.db:
+          cache: false
+      - mlruns:
+          cache: false
