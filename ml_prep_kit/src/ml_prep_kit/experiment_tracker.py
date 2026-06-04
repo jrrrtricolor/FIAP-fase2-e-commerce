@@ -7,6 +7,7 @@ from typing import Any
 import mlflow
 import mlflow.pytorch
 import mlflow.sklearn
+from mlflow.tracking import MlflowClient
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,7 @@ class ExperimentTracker:
         metrics: dict[str, float],
         artifacts: list[str | Path] | None = None,
         model_name: str = "model",
+        registered_model_name: str | None = None,
     ) -> str:
         """Registra parâmetros, métricas, artefatos e modelo treinado.
 
@@ -73,7 +75,7 @@ class ExperimentTracker:
             )
         """
         logger.info(
-            "Iniciando registro do modelo Scikit-Learn no MLflow.",
+            "Iniciando registro do modelo no MLflow.",
             extra={
                 "evento": "registro_sklearn_mlflow_iniciado",
                 "nome_execucao": run_name,
@@ -92,10 +94,11 @@ class ExperimentTracker:
             mlflow.sklearn.log_model(
                 sk_model=model,
                 name=model_name,
+                registered_model_name=registered_model_name,
             )
 
             logger.info(
-                "Modelo Scikit-Learn registrado no MLflow com sucesso.",
+                "Modelo registrado no MLflow com sucesso.",
                 extra={
                     "evento": "registro_sklearn_mlflow_concluido",
                     "nome_execucao": run_name,
@@ -115,6 +118,7 @@ class ExperimentTracker:
         artifacts: list[str | Path] | None = None,
         input_example: Any | None = None,
         model_name: str = "model",
+        registered_model_name: str | None = None,
     ) -> str:
         """Registra parâmetros, métricas, artefatos e modelo PyTorch.
 
@@ -128,7 +132,7 @@ class ExperimentTracker:
             )
         """
         logger.info(
-            "Iniciando registro do modelo PyTorch no MLflow.",
+            "Iniciando registro do modelo PyTorch.",
             extra={
                 "evento": "registro_pytorch_mlflow_iniciado",
                 "nome_execucao": run_name,
@@ -149,10 +153,11 @@ class ExperimentTracker:
                 name=model_name,
                 input_example=input_example,
                 serialization_format="pt2",
+                registered_model_name=registered_model_name,
             )
 
             logger.info(
-                "Modelo PyTorch registrado no MLflow com sucesso.",
+                "Modelo PyTorch registrado com sucesso.",
                 extra={
                     "evento": "registro_pytorch_mlflow_concluido",
                     "nome_execucao": run_name,
@@ -162,6 +167,55 @@ class ExperimentTracker:
             )
 
             return run.info.run_id
+
+    def promote_latest_model_version(
+        self,
+        registered_model_name: str,
+        alias: str = "production",
+    ) -> str:
+        """Promove a versão mais recente do modelo registrado.
+
+        Exemplo:
+            version = tracker.promote_latest_model_version(
+                registered_model_name="ecommerce_recommender_pytorch_mlp",
+                alias="production",
+            )
+        """
+        # Buscar versões registradas para o modelo informado.
+        client = MlflowClient()
+        versions = client.search_model_versions(
+            f"name = '{registered_model_name}'"
+        )
+
+        # Interromper quando o modelo ainda não existir no registro.
+        if not versions:
+            raise ValueError(
+                f"Modelo registrado não encontrado: {registered_model_name}."
+            )
+
+        # Selecionar a versão mais recente do modelo.
+        latest_version = max(
+            versions,
+            key=lambda version: int(version.version),
+        )
+
+        # Aplicar o alias na versão mais recente.
+        client.set_registered_model_alias(
+            registered_model_name,
+            alias,
+            latest_version.version,
+        )
+        logger.info(
+            "Modelo promovido com sucesso.",
+            extra={
+                "evento": "modelo_promovido_registry",
+                "nome_modelo_registrado": registered_model_name,
+                "versao": latest_version.version,
+                "alias": alias,
+            },
+        )
+
+        return str(latest_version.version)
 
     def _stringify_values(self, values: dict[str, Any]) -> dict[str, Any]:
         """Converte valores complexos para texto aceito pelo MLflow."""
