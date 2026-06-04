@@ -8,8 +8,8 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Definir o problema como recomendação de produtos para e-commerce.
 - [x] Usar o comportamento dos usuários como base para as recomendações.
 - [x] Organizar o projeto em torno do domínio de recomendação.
-- [ ] Documentar claramente a solução final no README.
-- [ ] Explicar como o modelo gera ou prioriza recomendações.
+- [x] Documentar claramente a solução final no README.
+- [x] Explicar como o modelo gera ou prioriza recomendações.
 
 ## 2. Dados
 
@@ -18,9 +18,10 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Criar uma base de treino estruturada para recomendação.
 - [x] Armazenar os dados no diretório `data/`.
 - [x] Usar um banco SQLite local para a base de treino.
-- [ ] Documentar a origem dos dados.
-- [ ] Documentar o processo de preparação da base de treino.
-- [ ] Versionar o pipeline de dados com DVC.
+- [x] Documentar a origem dos dados.
+- [x] Versionar o pipeline de dados com DVC em versão inicial.
+- [ ] Documentar em detalhe o processo de preparação da base de treino.
+- [ ] Criar stage DVC específico para preparação da base `training_data.db`.
 
 ## 3. Estrutura do projeto
 
@@ -41,8 +42,8 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Separar dependências principais e dependências de desenvolvimento.
 - [x] Garantir que o projeto rode com `poetry run`.
 - [x] Adicionar PyTorch como dependência principal do projeto.
-- [ ] Documentar a instalação com Poetry no README.
-- [ ] Documentar os principais comandos de execução.
+- [x] Documentar a instalação com Poetry no README.
+- [x] Documentar os principais comandos de execução.
 
 ## 5. Qualidade de código
 
@@ -63,11 +64,11 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Criar testes para o classificador PyTorch com interface Scikit-Learn.
 - [x] Criar testes para logging estruturado.
 - [x] Rodar os testes do `ml_prep_kit` com Poetry.
+- [x] Documentar o comando de testes no README.
 - [ ] Criar testes para `ExperimentTracker`, usando mocks ou um ambiente local
       controlado.
 - [ ] Criar um teste simples para importação do pacote
       `ecommerce_recommender`.
-- [ ] Documentar o comando de testes no README.
 
 ## 7. Modelagem
 
@@ -81,8 +82,9 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
       Scikit-Learn.
 - [x] Implementar o modelo principal com PyTorch.
 - [x] Fixar seeds de forma consistente.
+- [x] Documentar estratégia de score e ranking no README e no Model Card.
 - [ ] Salvar ou registrar o melhor modelo final.
-- [ ] Documentar as métricas escolhidas e suas justificativas.
+- [x] Documentar as métricas escolhidas e suas justificativas.
 
 ## 8. MLflow
 
@@ -93,42 +95,44 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Registrar modelos Scikit-Learn.
 - [x] Configurar o tracking local com SQLite.
 - [x] Registrar o modelo PyTorch.
+- [x] Documentar como abrir a interface do MLflow.
 - [ ] Usar o MLflow Model Registry.
 - [ ] Promover o melhor modelo para Production ou alias equivalente.
-- [ ] Documentar como abrir a interface do MLflow.
 
 ## 9. DVC
 
-- [ ] Adicionar a dependência do DVC.
-- [ ] Inicializar o DVC no projeto.
-- [ ] Criar o arquivo `dvc.yaml`.
+- [x] Adicionar a dependência do DVC.
+- [x] Inicializar o DVC no projeto.
+- [x] Criar o arquivo `dvc.yaml`.
+- [x] Documentar como reproduzir o pipeline com DVC.
+- [x] Versionar o treino do modelo em versão inicial.
 - [ ] Criar pelo menos três stages no pipeline.
 - [ ] Versionar a preparação dos dados.
-- [ ] Versionar o treino do modelo.
 - [ ] Versionar a avaliação ou o registro do modelo.
-- [ ] Documentar como reproduzir o pipeline com DVC.
 
 ## 10. Docker
 
-- [ ] Criar o arquivo `.dockerignore`.
-- [ ] Criar o `Dockerfile`.
+- [x] Criar o arquivo `.dockerignore`.
+- [x] Criar o `Dockerfile`.
+- [x] Documentar os comandos Docker no README.
 - [ ] Usar Dockerfile multi-stage, se aplicável.
 - [ ] Criar o arquivo `docker-compose.yml`, se necessário.
 - [ ] Garantir a execução do treino dentro do container.
-- [ ] Documentar os comandos Docker no README.
+- [ ] Validar o build em ambiente com Docker daemon ativo.
 
 ## 11. Documentação
 
 - [x] Criar o README inicial do projeto.
 - [x] Documentar a estrutura principal do projeto.
-- [ ] Atualizar o README com a instalação via Poetry.
-- [ ] Atualizar o README com os comandos de teste.
-- [ ] Atualizar o README com os comandos de treino.
-- [ ] Atualizar o README com os comandos do MLflow.
-- [ ] Atualizar o README com os comandos do DVC.
-- [ ] Atualizar o README com os comandos Docker.
-- [ ] Criar o Model Card do modelo final.
-- [ ] Criar um resumo da arquitetura da solução.
+- [x] Atualizar o README com a instalação via Poetry.
+- [x] Atualizar o README com os comandos de teste.
+- [x] Atualizar o README com os comandos de treino.
+- [x] Atualizar o README com os comandos do MLflow.
+- [x] Atualizar o README com os comandos do DVC.
+- [x] Atualizar o README com os comandos Docker.
+- [x] Criar o Model Card inicial do modelo.
+- [ ] Atualizar o Model Card com resultados finais.
+- [x] Criar um resumo da arquitetura da solução.
 - [ ] Criar o roteiro do vídeo final no formato STAR.
 
 ## 12. Git e entrega
@@ -147,8 +151,8 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 | --- | ---: | --- |
 | Clean code e estrutura | 15% | Em andamento |
 | Reprodutibilidade | 15% | Em andamento |
-| Docker | 15% | Pendente |
-| Pipeline DVC | 15% | Pendente |
+| Docker | 15% | Em andamento |
+| Pipeline DVC | 15% | Em andamento |
 | Rede neural com PyTorch | 15% | Em andamento |
 | MLflow e Model Registry | 10% | Em andamento |
 | Vídeo STAR | 10% | Pendente |
@@ -157,7 +161,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 ## Próximos passos recomendados
 
 1. Comparar o modelo PyTorch com os baselines no MLflow.
-2. Criar o pipeline DVC com pelo menos três stages.
-3. Criar o Dockerfile e validar a execução em container.
-4. Atualizar o README e criar o Model Card.
+2. Criar stage DVC específico para preparação da base `training_data.db`.
+3. Validar o build Docker em ambiente com Docker daemon ativo.
+4. Promover o melhor modelo no MLflow Model Registry.
 5. Preparar o roteiro do vídeo STAR.
