@@ -1,0 +1,54 @@
+[tool.ruff]
+line-length = 79
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP"]
+ignore = [
+    "N803", # Mantém X e y em métodos compatíveis com o padrão Scikit-Learn.
+    "N806", # Mantém X_train/X_valid em fluxos de treino de Machine Learning.
+]
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*.ipynb" = ["E402", "E501", "I001"]
+"ml_prep_kit/__init__.py" = ["E402"]
+
+[project]
+name = "fiap-fase2-ecommerce-recommender"
+version = "0.1.0"
+description = "Sistema de recomendação de produtos para e-commerce baseado no comportamento de usuários, desenvolvido para o Tech Challenge Fase 2 da FIAP."
+authors = [
+    {name = "Cassio Junior", email = "jrrrtricolor@gmail.com"},
+    {name = "Júlia Otranto Aulicino"}
+]
+readme = "README.md"
+requires-python = ">=3.13,<3.15"
+dependencies = [
+    "pandas (>=2.3.3,<3.0.0)",
+    "numpy (>=2.4.6,<3.0.0)",
+    "scikit-learn (>=1.8.0,<2.0.0)",
+    "matplotlib (>=3.10.9,<4.0.0)",
+    "kagglehub (>=1.0.1,<2.0.0)",
+    "mlflow (>=3.7.0,<4.0.0)",
+    "protobuf (>=3.20.0,<3.21.0)",
+    "torch (>=2.12.0,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.15.15,<0.16.0)",
+    "ipykernel (>=7.2.0,<8.0.0)",
+    "jupyterlab (>=4.5.7,<5.0.0)",
+    "dvc (>=3.67.1,<4.0.0)"
+]
+
+[tool.poetry]
+packages = [
+    { include = "ml_prep_kit", from = "ml_prep_kit/src" },
+    { include = "ecommerce_recommender", from = "src" }
+]

@@ -1,0 +1,45 @@
+"""Atalho local para o pacote mantido em ``ml_prep_kit/src``.
+
+Este arquivo permite importar ``ml_prep_kit`` ao executar testes e notebooks
+diretamente da raiz do projeto, sem depender de ``PYTHONPATH`` manual.
+"""
+
+from pathlib import Path
+
+_PACKAGE_DIR = Path(__file__).resolve().parent / "src" / "ml_prep_kit"
+__path__.append(str(_PACKAGE_DIR))
+
+from ml_prep_kit.csv_data_loader import CSVDataLoader
+from ml_prep_kit.data_validator import DataValidator
+from ml_prep_kit.experiment_tracker import ExperimentTracker
+from ml_prep_kit.feature_preprocessor import FeaturePreprocessor
+from ml_prep_kit.model_evaluator import ModelEvaluator
+from ml_prep_kit.model_factory import ModelFactory
+from ml_prep_kit.sklearn_torch_binary_classifier import (
+    SklearnTorchBinaryClassifier,
+)
+from ml_prep_kit.sqlite_dataframe_store import SQLiteDataFrameStore
+from ml_prep_kit.structured_json_formatter import StructuredJsonFormatter
+from ml_prep_kit.structured_logging_configurator import (
+    StructuredLoggingConfigurator,
+)
+from ml_prep_kit.tabular_binary_classifier import TabularBinaryClassifier
+from ml_prep_kit.utils import format_currency, format_percent
+from ml_prep_kit.visualization_reporter import VisualizationReporter
+
+__all__ = [
+    "CSVDataLoader",
+    "DataValidator",
+    "ExperimentTracker",
+    "FeaturePreprocessor",
+    "ModelEvaluator",
+    "ModelFactory",
+    "SklearnTorchBinaryClassifier",
+    "SQLiteDataFrameStore",
+    "StructuredJsonFormatter",
+    "StructuredLoggingConfigurator",
+    "TabularBinaryClassifier",
+    "VisualizationReporter",
+    "format_currency",
+    "format_percent",
+]
