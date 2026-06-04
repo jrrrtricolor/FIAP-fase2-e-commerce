@@ -31,8 +31,7 @@ dependencies = [
     "kagglehub (>=1.0.1,<2.0.0)",
     "mlflow (>=3.7.0,<4.0.0)",
     "protobuf (>=3.20.0,<3.21.0)",
-    "torch (>=2.12.0,<3.0.0)",
-    "dvc (>=3.67.1,<4.0.0)"
+    "torch (>=2.12.0,<3.0.0)"
 ]
 
 
@@ -44,7 +43,8 @@ build-backend = "poetry.core.masonry.api"
 dev = [
     "ruff (>=0.15.15,<0.16.0)",
     "ipykernel (>=7.2.0,<8.0.0)",
-    "jupyterlab (>=4.5.7,<5.0.0)"
+    "jupyterlab (>=4.5.7,<5.0.0)",
+    "dvc (>=3.67.1,<4.0.0)"
 ]
 
 [tool.poetry]
