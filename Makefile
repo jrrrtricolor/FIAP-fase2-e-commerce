@@ -2,7 +2,7 @@
 
 POETRY ?= poetry
 DOCKER_IMAGE ?= fiap-fase2-ecommerce-recommender
-DOCKER_TAG ?= $(shell $(POETRY) version --short)
+DOCKER_TAG ?= $(shell awk -F'"' '/^version =/ {print $$2; exit}' pyproject.toml)
 MLFLOW_PORT ?= 5001
 
 install:
