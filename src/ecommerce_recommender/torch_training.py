@@ -36,22 +36,37 @@ from ml_prep_kit import (
 LOGGER = logging.getLogger("ecommerce_recommender.torch_training")
 
 
-def run_training() -> None:
+def run_training(configurar_logs: bool = True) -> dict[str, float | str]:
     """Executa o treino neural e registra o resultado no MLflow.
 
     Exemplo:
         run_training()
     """
-    nome_modelo = "pytorch_mlp"  # Nome usado na execução do MLflow.
-    epocas = 10  # Quantidade de passagens completas pela base de treino.
-    tamanho_lote = 512  # Quantidade de exemplos processados por lote.
-    taxa_aprendizado = 0.001  # Taxa usada pelo otimizador Adam.
-    tamanho_camada_oculta = 64  # Neurônios da camada oculta.
-    limiar_classificacao = 0.5  # Corte para converter score em classe.
+    # Definir o nome usado na execução do MLflow.
+    nome_modelo = "pytorch_mlp"
 
-    StructuredLoggingConfigurator.configure()
+    # Definir o nome do modelo registrado no MLflow.
+    nome_modelo_registrado = "ecommerce_recommender_pytorch_mlp"
+
+    # Definir a quantidade de passagens completas pela base de treino.
+    epocas = 10
+
+    # Definir a quantidade de exemplos processados por lote.
+    tamanho_lote = 512
+
+    # Definir a taxa usada pelo otimizador Adam.
+    taxa_aprendizado = 0.001
+
+    # Definir a quantidade de neurônios da camada oculta.
+    tamanho_camada_oculta = 64
+
+    # Definir o corte para converter probabilidade em classe.
+    limiar_classificacao = 0.5
+
+    if configurar_logs:
+        StructuredLoggingConfigurator.configure()
     LOGGER.info(
-        "Iniciando treino PyTorch do recomendador.",
+        "Iniciando treino PyTorch.",
         extra={
             "evento": "treino_pytorch_iniciado",
             "nome_modelo": nome_modelo,
@@ -69,7 +84,7 @@ def run_training() -> None:
     y = dados[TARGET_COLUMN]
 
     LOGGER.info(
-        "Separando dados entre treino e validação.",
+        "Separando dados de treino e validação.",
         extra={
             "evento": "divisao_treino_validacao_iniciada",
             "linhas": len(dados),
@@ -85,7 +100,7 @@ def run_training() -> None:
     )
 
     LOGGER.info(
-        "Preparando features com o preprocessador do projeto.",
+        "Preparando features.",
         extra={
             "evento": "pre_processamento_iniciado",
             "colunas_numericas": len(NUMERIC_COLUMNS),
@@ -126,7 +141,7 @@ def run_training() -> None:
     )
     metricas["train_loss"] = classificador.train_loss_
 
-    # Chaves mantidas em inglês para padronizar a visualização no MLflow.
+    # Definir os parâmetros registrados no MLflow.
     parametros = {
         "model_name": nome_modelo,
         "sample_size": len(dados),
@@ -142,7 +157,7 @@ def run_training() -> None:
     }
 
     LOGGER.info(
-        "Registrando modelo PyTorch no MLflow.",
+        "Registrando modelo PyTorch.",
         extra={
             "evento": "registro_modelo_pytorch_iniciado",
             "nome_modelo": nome_modelo,
@@ -164,6 +179,13 @@ def run_training() -> None:
         exemplo_entrada=X_validacao_pronto.head(5).to_numpy(
             dtype=np.float32,
         ),
+        nome_modelo_registrado=nome_modelo_registrado,
+    )
+
+    # Promover o modelo PyTorch no registro do MLflow.
+    rastreador.promote_latest_model_version(
+        registered_model_name=nome_modelo_registrado,
+        alias="production",
     )
 
     LOGGER.info(
@@ -176,6 +198,13 @@ def run_training() -> None:
         },
     )
 
+    return {
+        "model_name": nome_modelo,
+        "registered_model_name": nome_modelo_registrado,
+        "run_id": execucao_id,
+        **metricas,
+    }
+
 
 def log_model(
     rastreador: ExperimentTracker,
@@ -185,6 +214,7 @@ def log_model(
     metricas: dict[str, float],
     preprocessador: FeaturePreprocessor,
     exemplo_entrada: np.ndarray,
+    nome_modelo_registrado: str,
 ) -> str:
     """Registra a rede neural e o preprocessador no MLflow.
 
@@ -203,8 +233,8 @@ def log_model(
         caminho_preprocessador = (
             f"{diretorio_temporario}/preprocessor.joblib"
         )
-        # O preprocessador é necessário para transformar dados novos antes de
-        # chamar a rede neural.
+
+        # Salvar o preprocessador usado no treino.
         joblib.dump(preprocessador.transformer, caminho_preprocessador)
 
         return rastreador.log_pytorch_training_run(
@@ -214,6 +244,7 @@ def log_model(
             metrics=metricas,
             artifacts=[caminho_preprocessador],
             input_example=exemplo_entrada,
+            registered_model_name=nome_modelo_registrado,
         )
 
 

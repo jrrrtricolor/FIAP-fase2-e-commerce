@@ -99,13 +99,9 @@ O uso esperado é:
 
 ## Limitações
 
-- A rotina final de geração de Top-N recomendações ainda precisa ser
-  consolidada.
-- A preparação da base `training_data.db` ainda precisa virar um stage próprio
-  do DVC.
-- O MLflow Model Registry ainda não foi usado para promover o melhor modelo.
+- A rotina de Top-N recomendações existe, mas ainda não foi exposta por API.
 - As métricas atuais são de classificação, não de ranking.
-- O Dockerfile ainda precisa ser validado em ambiente com Docker ativo.
+- O deploy em cloud ainda não foi implementado.
 
 ## Riscos
 
@@ -116,8 +112,7 @@ O uso esperado é:
 
 ## Próximos passos
 
-1. Criar a rotina de Top-N recomendações.
-2. Adicionar métricas de ranking.
-3. Criar stage DVC para preparação da base de treino.
-4. Comparar os modelos no MLflow.
-5. Promover o melhor modelo no MLflow Model Registry.
+1. Adicionar métricas de ranking.
+2. Conectar recomendações Top-N a uma API.
+3. Comparar os modelos finais no MLflow.
+4. Preparar o roteiro do vídeo STAR.

@@ -20,8 +20,8 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Usar um banco SQLite local para a base de treino.
 - [x] Documentar a origem dos dados.
 - [x] Versionar o pipeline de dados com DVC em versão inicial.
-- [ ] Documentar em detalhe o processo de preparação da base de treino.
-- [ ] Criar stage DVC específico para preparação da base `training_data.db`.
+- [x] Documentar em detalhe o processo de preparação da base de treino.
+- [x] Criar stage DVC específico para preparação da base `training_data.db`.
 
 ## 3. Estrutura do projeto
 
@@ -76,14 +76,14 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Criar um avaliador reutilizável de modelos.
 - [x] Calcular métricas de classificação.
 - [x] Treinar modelos iniciais com uma amostra da base.
-- [ ] Definir a estratégia final de recomendação.
+- [x] Definir a estratégia final de recomendação.
 - [x] Criar uma rede neural tabular reutilizável no `ml_prep_kit`.
 - [x] Criar um classificador PyTorch reutilizável com interface semelhante ao
       Scikit-Learn.
 - [x] Implementar o modelo principal com PyTorch.
 - [x] Fixar seeds de forma consistente.
 - [x] Documentar estratégia de score e ranking no README e no Model Card.
-- [ ] Salvar ou registrar o melhor modelo final.
+- [x] Salvar ou registrar o melhor modelo final.
 - [x] Documentar as métricas escolhidas e suas justificativas.
 
 ## 8. MLflow
@@ -96,8 +96,8 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Configurar o tracking local com SQLite.
 - [x] Registrar o modelo PyTorch.
 - [x] Documentar como abrir a interface do MLflow.
-- [ ] Usar o MLflow Model Registry.
-- [ ] Promover o melhor modelo para Production ou alias equivalente.
+- [x] Usar o MLflow Model Registry.
+- [x] Promover o melhor modelo para Production ou alias equivalente.
 
 ## 9. DVC
 
@@ -106,8 +106,8 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Criar o arquivo `dvc.yaml`.
 - [x] Documentar como reproduzir o pipeline com DVC.
 - [x] Versionar o treino do modelo em versão inicial.
-- [ ] Criar pelo menos três stages no pipeline.
-- [ ] Versionar a preparação dos dados.
+- [x] Criar pelo menos três stages no pipeline.
+- [x] Versionar a preparação dos dados.
 - [ ] Versionar a avaliação ou o registro do modelo.
 
 ## 10. Docker
@@ -115,10 +115,10 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Criar o arquivo `.dockerignore`.
 - [x] Criar o `Dockerfile`.
 - [x] Documentar os comandos Docker no README.
-- [ ] Usar Dockerfile multi-stage, se aplicável.
-- [ ] Criar o arquivo `docker-compose.yml`, se necessário.
+- [x] Usar Dockerfile multi-stage, se aplicável.
+- [x] Criar o arquivo `docker-compose.yml`, se necessário.
 - [ ] Garantir a execução do treino dentro do container.
-- [ ] Validar o build em ambiente com Docker daemon ativo.
+- [x] Validar o build em ambiente com Docker daemon ativo.
 
 ## 11. Documentação
 
@@ -151,17 +151,16 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 | --- | ---: | --- |
 | Clean code e estrutura | 15% | Em andamento |
 | Reprodutibilidade | 15% | Em andamento |
-| Docker | 15% | Em andamento |
+| Docker | 15% | Atendido em versão local |
 | Pipeline DVC | 15% | Em andamento |
-| Rede neural com PyTorch | 15% | Em andamento |
-| MLflow e Model Registry | 10% | Em andamento |
+| Rede neural com PyTorch | 15% | Atendido em versão inicial |
+| MLflow e Model Registry | 10% | Atendido em versão inicial |
 | Vídeo STAR | 10% | Pendente |
 | Bônus de deploy em cloud | 5% | Opcional |
 
 ## Próximos passos recomendados
 
 1. Comparar o modelo PyTorch com os baselines no MLflow.
-2. Criar stage DVC específico para preparação da base `training_data.db`.
-3. Validar o build Docker em ambiente com Docker daemon ativo.
-4. Promover o melhor modelo no MLflow Model Registry.
-5. Preparar o roteiro do vídeo STAR.
+2. Criar uma stage DVC separada para avaliação final, se necessário.
+3. Adicionar métricas de ranking.
+4. Preparar o roteiro do vídeo STAR.

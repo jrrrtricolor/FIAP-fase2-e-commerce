@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import sqlite3
 from pathlib import Path
 
@@ -20,13 +21,17 @@ from ml_prep_kit import (
 LOGGER = logging.getLogger("ecommerce_recommender.training")
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATABASE_PATH = PROJECT_ROOT / "data" / "training_data.db"
-MLFLOW_TRACKING_URI = f"sqlite:///{PROJECT_ROOT / 'mlflow.db'}"
+MLFLOW_TRACKING_URI = os.getenv(
+    "MLFLOW_TRACKING_URI",
+    f"sqlite:///{PROJECT_ROOT / 'mlflow.db'}",
+)
 MLFLOW_EXPERIMENT_NAME = "tech-challenge-fase2-recommendation"
 TABLE_NAME = "training_data"
 RANDOM_SEED = 42
 SAMPLE_SIZE = 50_000
 POSITIVE_RATE = 0.2
 TEST_SIZE = 0.25
+BEST_MODEL_METRIC = "roc_auc"
 
 METADATA_COLUMNS = ["user_id", "product_id"]
 TARGET_COLUMN = "target"
@@ -102,17 +107,14 @@ MODEL_CONFIGS = [
 ]
 
 
-def run_training() -> None:
+def run_training(configurar_logs: bool = True) -> pd.DataFrame:
     """Executa o treino dos modelos clássicos e registra no MLflow.
-
-    Este fluxo treina modelos tradicionais de Machine Learning para criar
-    baselines de comparação. O resultado de cada modelo é avaliado e salvo no
-    MLflow com os parâmetros usados no experimento.
 
     Exemplo:
         run_training()
     """
-    StructuredLoggingConfigurator.configure()
+    if configurar_logs:
+        StructuredLoggingConfigurator.configure()
 
     LOGGER.info(
         "Iniciando treino dos modelos clássicos.",
@@ -134,7 +136,7 @@ def run_training() -> None:
     y = dados[TARGET_COLUMN]
 
     LOGGER.info(
-        "Separando amostra entre treino e validação.",
+        "Separando dados de treino e validação.",
         extra={
             "evento": "divisao_treino_validacao_iniciada",
             "linhas": len(dados),
@@ -175,20 +177,26 @@ def run_training() -> None:
         results.append(result)
 
     report = pd.DataFrame(results).sort_values(
-        "roc_auc",
+        BEST_MODEL_METRIC,
         ascending=False,
     )
 
+    # Promover o melhor modelo clássico no registro do MLflow.
+    best_result = report.iloc[0]
+    tracker.promote_latest_model_version(
+        registered_model_name=str(best_result["registered_model_name"]),
+        alias="production",
+    )
+
     LOGGER.info(
-        "Treino dos modelos clássicos concluído.",
+        "Treino dos modelos clássicos concluído com sucesso.",
         extra={
             "evento": "treino_modelos_classicos_concluido",
             "modelos_treinados": len(results),
         },
     )
 
-    print("\nResultados registrados no MLflow:")
-    print(report.to_string(index=False))
+    return report
 
 
 def main() -> None:
@@ -197,7 +205,9 @@ def main() -> None:
     Exemplo:
         poetry run python -m ecommerce_recommender.training
     """
-    run_training()
+    report = run_training()
+    print("\nResultados registrados no MLflow:")
+    print(report.to_string(index=False))
 
 
 def load_training_sample(
@@ -207,9 +217,6 @@ def load_training_sample(
     random_state: int,
 ) -> pd.DataFrame:
     """Carrega uma amostra balanceada a partir da base SQLite.
-
-    A amostra usa uma quantidade controlada de exemplos positivos e negativos
-    para evitar que o treino fique dominado pela classe majoritária.
 
     Exemplo:
         dados = load_training_sample(
@@ -264,9 +271,6 @@ def train_and_log_model(
 ) -> dict[str, float | str]:
     """Treina, avalia e registra um modelo clássico no MLflow.
 
-    Esta função concentra o ciclo de um modelo: cria o pipeline, treina com os
-    dados de treino, calcula métricas na validação e registra tudo no MLflow.
-
     Exemplo:
         resultado = train_and_log_model(
             config=config,
@@ -283,8 +287,11 @@ def train_and_log_model(
         )
     """
     model_name = config["model_name"]
+
+    # Definir o nome do modelo registrado no MLflow.
+    registered_model_name = f"ecommerce_recommender_{model_name}"
     LOGGER.info(
-        "Treinando modelo clássico.",
+        "Iniciando treino do modelo clássico.",
         extra={
             "evento": "treino_modelo_classico_iniciado",
             "nome_modelo": model_name,
@@ -325,10 +332,11 @@ def train_and_log_model(
         model=pipeline,
         parameters=parameters,
         metrics=metrics,
+        registered_model_name=registered_model_name,
     )
 
     LOGGER.info(
-        "Modelo clássico registrado no MLflow.",
+        "Modelo clássico registrado com sucesso.",
         extra={
             "evento": "treino_modelo_classico_concluido",
             "nome_modelo": model_name,
@@ -339,6 +347,7 @@ def train_and_log_model(
 
     return {
         "model_name": model_name,
+        "registered_model_name": registered_model_name,
         "run_id": run_id,
         **metrics,
     }
@@ -351,21 +360,20 @@ def get_positive_score(
 ) -> pd.Series:
     """Obtém o score usado para avaliar a classe positiva.
 
-    O ideal é usar ``predict_proba``. Quando o modelo não oferece
-    probabilidade, usamos ``decision_function``. Se nenhuma das duas saídas
-    existir, usamos a própria predição como aproximação simples.
-
     Exemplo:
         y_score = get_positive_score(pipeline, X_valid, y_pred)
     """
+    # Usar probabilidade quando o modelo oferecer predict_proba.
     if hasattr(pipeline, "predict_proba"):
         probabilities = pipeline.predict_proba(X_valid)
         return pd.Series(probabilities[:, 1], index=y_pred.index)
 
+    # Usar decision_function quando o modelo não tiver probabilidade.
     if hasattr(pipeline, "decision_function"):
         scores = pipeline.decision_function(X_valid)
         return pd.Series(scores, index=y_pred.index)
 
+    # Usar a própria predição quando não houver pontuação disponível.
     return y_pred.astype(float)
 
 

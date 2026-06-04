@@ -1,8 +1,8 @@
-.PHONY: install check lint test train train-classic train-torch mlflow-ui clean docker-build docker-run dvc-repro dvc-status
+.PHONY: install check lint test prepare-data train train-classic train-torch mlflow-ui clean docker-build docker-run dvc-repro dvc-status
 
 POETRY ?= poetry
 DOCKER_IMAGE ?= fiap-fase2-ecommerce-recommender
-DOCKER_TAG ?= latest
+DOCKER_TAG ?= $(shell awk -F'"' '/^version =/ {print $$2; exit}' pyproject.toml)
 MLFLOW_PORT ?= 5001
 
 install:
@@ -16,6 +16,9 @@ lint:
 
 test:
 	$(POETRY) run python -m unittest discover ml_prep_kit/tests
+
+prepare-data:
+	$(POETRY) run python -m ecommerce_recommender.prepare_data
 
 train:
 	$(POETRY) run python -m ecommerce_recommender.main

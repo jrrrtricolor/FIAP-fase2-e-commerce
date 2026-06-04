@@ -1,0 +1,31 @@
+services:
+  trainer:
+    build: .
+    image: fiap-fase2-ecommerce-recommender:${DOCKER_TAG:-0.1.0}
+    command: python -m ecommerce_recommender.main
+    environment:
+      MLFLOW_TRACKING_URI: sqlite:////app/mlflow/mlflow.db
+    volumes:
+      - ./data:/app/data
+      - ./model:/app/model
+      - ./mlflow:/app/mlflow
+      - ./mlruns:/app/mlruns
+
+  mlflow:
+    image: fiap-fase2-ecommerce-recommender:${DOCKER_TAG:-0.1.0}
+    command:
+      - mlflow
+      - server
+      - --backend-store-uri
+      - sqlite:////app/mlflow/mlflow.db
+      - --default-artifact-root
+      - /app/mlruns
+      - --host
+      - 0.0.0.0
+      - --port
+      - "5001"
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./mlflow:/app/mlflow
+      - ./mlruns:/app/mlruns
