@@ -26,6 +26,7 @@ data/*.sqlite3
 
 # Experiment tracking
 mlruns/
+mlflow/
 mlflow.db
 
 # OS and editor files
