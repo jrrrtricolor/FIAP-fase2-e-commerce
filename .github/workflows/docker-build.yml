@@ -15,5 +15,13 @@ jobs:
       - name: Baixar codigo
         uses: actions/checkout@v4
 
+      - name: Liberar espaco no runner
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/lib/android
+          docker system prune -af
+          df -h
+
       - name: Construir imagem
         run: make docker-build
