@@ -22,8 +22,12 @@ docs/         -> documentação da entrega
 - `ml_prep_kit/`: preprocessamento, avaliação, logging, MLflow e modelos
   reutilizáveis.
 - `src/ecommerce_recommender/main.py`: executa o fluxo principal.
+- `src/ecommerce_recommender/prepare_data.py`: prepara a base SQLite de
+  treino a partir dos CSVs da Instacart.
 - `src/ecommerce_recommender/training.py`: treina baselines Scikit-Learn.
 - `src/ecommerce_recommender/torch_training.py`: treina o modelo PyTorch.
+- `src/ecommerce_recommender/recommendation.py`: gera recomendações Top-N a
+  partir dos scores do modelo.
 - `data/download_dataset.py`: baixa o dataset Instacart.
 - `Makefile`: centraliza os comandos do projeto.
 
@@ -48,6 +52,12 @@ data/training_data.db
 ```
 
 Essa base não é versionada no Git por ser grande.
+
+Preparar a base SQLite:
+
+```bash
+make prepare-data
+```
 
 ## Instalação
 
@@ -140,6 +150,7 @@ make dvc-repro
 Stages atuais:
 
 - `download_dataset`
+- `prepare_data`
 - `train_models`
 
 ## Docker
@@ -150,10 +161,23 @@ Construir imagem:
 make docker-build
 ```
 
+Por padrão, a tag Docker usa a versão semântica do `pyproject.toml`.
+Na versão atual, a imagem fica:
+
+```text
+fiap-fase2-ecommerce-recommender:0.1.0
+```
+
 Executar container:
 
 ```bash
 make docker-run
+```
+
+Subir a interface do MLflow com Docker Compose:
+
+```bash
+docker compose up mlflow
 ```
 
 Observação: é necessário ter o Docker daemon ativo.
@@ -179,8 +203,6 @@ Também possui GitHub Actions para:
 
 ## Limitações atuais
 
-- A rotina final de Top-N recomendações ainda precisa ser consolidada.
-- A preparação de `data/training_data.db` ainda deve virar um stage próprio do
-  DVC.
-- O MLflow Model Registry ainda não foi usado para promover o melhor modelo.
-- O Dockerfile precisa ser validado em ambiente com Docker ativo.
+- As métricas atuais ainda são principalmente métricas de classificação.
+- A rotina Top-N está disponível, mas ainda precisa ser conectada a uma API.
+- O deploy em cloud ainda não foi implementado.
