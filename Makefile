@@ -32,6 +32,9 @@ train-torch:
 mlflow-ui:
 	$(POETRY) run mlflow ui --backend-store-uri sqlite:///mlflow.db --port $(MLFLOW_PORT)
 
+run-server:
+	$(POETRY) run fastapi run src/ecommerce_recommender/api.py
+
 docker-build:
 	docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
 

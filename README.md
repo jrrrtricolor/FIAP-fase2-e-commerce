@@ -110,6 +110,20 @@ Treinar apenas o modelo PyTorch:
 make train-torch
 ```
 
+## API
+
+Executar servidor de API
+
+```bash
+make run-server
+```
+
+Acessar:
+
+```text
+http://localhost:8000/docs
+```
+
 ## MLflow
 
 Os experimentos são registrados localmente em:
