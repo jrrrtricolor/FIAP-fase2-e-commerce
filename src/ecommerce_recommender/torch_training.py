@@ -66,7 +66,7 @@ def run_training(configurar_logs: bool = True) -> dict[str, float | str]:
     if configurar_logs:
         StructuredLoggingConfigurator.configure()
     LOGGER.info(
-        "Iniciando treino PyTorch.",
+        "Iniciando o treino da rede neural PyTorch.",
         extra={
             "evento": "treino_pytorch_iniciado",
             "nome_modelo": nome_modelo,
@@ -84,7 +84,7 @@ def run_training(configurar_logs: bool = True) -> dict[str, float | str]:
     y = dados[TARGET_COLUMN]
 
     LOGGER.info(
-        "Separando dados de treino e validação.",
+        "Separando a base entre treino e validação.",
         extra={
             "evento": "divisao_treino_validacao_iniciada",
             "linhas": len(dados),
@@ -100,7 +100,7 @@ def run_training(configurar_logs: bool = True) -> dict[str, float | str]:
     )
 
     LOGGER.info(
-        "Preparando features.",
+        "Preparando as features para a rede neural.",
         extra={
             "evento": "pre_processamento_iniciado",
             "colunas_numericas": len(NUMERIC_COLUMNS),
@@ -157,7 +157,7 @@ def run_training(configurar_logs: bool = True) -> dict[str, float | str]:
     }
 
     LOGGER.info(
-        "Registrando modelo PyTorch.",
+        "Preparando artefatos da rede neural para o MLflow.",
         extra={
             "evento": "registro_modelo_pytorch_iniciado",
             "nome_modelo": nome_modelo,
@@ -189,7 +189,7 @@ def run_training(configurar_logs: bool = True) -> dict[str, float | str]:
     )
 
     LOGGER.info(
-        "Treino PyTorch concluído com sucesso.",
+        "Treino da rede neural PyTorch concluído.",
         extra={
             "evento": "treino_pytorch_concluido",
             "execucao_id": execucao_id,

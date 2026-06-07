@@ -117,7 +117,7 @@ def run_training(configurar_logs: bool = True) -> pd.DataFrame:
         StructuredLoggingConfigurator.configure()
 
     LOGGER.info(
-        "Iniciando treino dos modelos clássicos.",
+        "Iniciando o treino dos modelos clássicos de recomendação.",
         extra={
             "evento": "treino_modelos_classicos_iniciado",
             "tamanho_amostra": SAMPLE_SIZE,
@@ -136,7 +136,7 @@ def run_training(configurar_logs: bool = True) -> pd.DataFrame:
     y = dados[TARGET_COLUMN]
 
     LOGGER.info(
-        "Separando dados de treino e validação.",
+        "Separando a base entre treino e validação.",
         extra={
             "evento": "divisao_treino_validacao_iniciada",
             "linhas": len(dados),
@@ -189,7 +189,7 @@ def run_training(configurar_logs: bool = True) -> pd.DataFrame:
     )
 
     LOGGER.info(
-        "Treino dos modelos clássicos concluído com sucesso.",
+        "Treino dos modelos clássicos concluído.",
         extra={
             "evento": "treino_modelos_classicos_concluido",
             "modelos_treinados": len(results),
@@ -291,7 +291,8 @@ def train_and_log_model(
     # Definir o nome do modelo registrado no MLflow.
     registered_model_name = f"ecommerce_recommender_{model_name}"
     LOGGER.info(
-        "Iniciando treino do modelo clássico.",
+        "Treinando modelo clássico: %s.",
+        model_name,
         extra={
             "evento": "treino_modelo_classico_iniciado",
             "nome_modelo": model_name,
@@ -336,7 +337,8 @@ def train_and_log_model(
     )
 
     LOGGER.info(
-        "Modelo clássico registrado com sucesso.",
+        "Modelo clássico registrado no MLflow: %s.",
+        model_name,
         extra={
             "evento": "treino_modelo_classico_concluido",
             "nome_modelo": model_name,
