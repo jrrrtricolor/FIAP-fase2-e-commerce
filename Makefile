@@ -15,7 +15,8 @@ lint:
 	$(POETRY) run ruff check .
 
 test:
-	$(POETRY) run python -m unittest discover ml_prep_kit/tests
+	$(POETRY) run python -m unittest discover ./ml_prep_kit/tests
+	$(POETRY) run python -m unittest discover ./tests
 
 prepare-data:
 	$(POETRY) run python -m ecommerce_recommender.prepare_data
