@@ -42,6 +42,7 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         batch_size: int = 512,
         random_seed: int = 42,
         threshold: float = 0.5,
+        model_module: nn.Module | None = None,
     ) -> None:
         """Guarda os hiperparâmetros usados no treino.
 
@@ -59,6 +60,8 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         self.batch_size = batch_size
         self.random_seed = random_seed
         self.threshold = threshold
+        self.model_module = model_module
+        self.is_fitted_ = False
 
     def fit(self, X, y):
         """Treina a rede neural com os dados informados.
@@ -66,6 +69,12 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         Exemplo:
             classificador.fit(X_treino, y_treino)
         """
+
+        if (self.is_fitted_):
+            raise ValueError(
+                "O modelo já foi treinado ou carregado."
+            )
+
         X_matriz = np.asarray(X, dtype=np.float32)
         y_vetor = np.asarray(y, dtype=np.float32)
 
@@ -159,10 +168,18 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         Exemplo:
             probabilidades = classificador.predict_proba(X_validacao)
         """
+        if self.is_fitted_ is False:
+            if self.model_module is None:
+                raise ValueError(
+                    "Modelo não treinado."
+                )
+
         X_matriz = np.asarray(X, dtype=np.float32)
         X_tensor = torch.tensor(X_matriz, dtype=torch.float32)
 
-        self.model_module.eval()
+        if self.is_fitted_:
+            self.model_module.eval()
+
         with torch.no_grad():
             # Sigmoid transforma a saída bruta em probabilidade positiva.
             logits = self.model_module(X_tensor)

@@ -15,7 +15,8 @@ lint:
 	$(POETRY) run ruff check .
 
 test:
-	$(POETRY) run python -m unittest discover ml_prep_kit/tests
+	$(POETRY) run python -m unittest discover ./ml_prep_kit/tests
+	$(POETRY) run python -m unittest discover ./tests
 
 prepare-data:
 	$(POETRY) run python -m ecommerce_recommender.prepare_data
@@ -31,6 +32,9 @@ train-torch:
 
 mlflow-ui:
 	$(POETRY) run mlflow ui --backend-store-uri sqlite:///mlflow.db --port $(MLFLOW_PORT)
+
+run-server:
+	$(POETRY) run fastapi run src/ecommerce_recommender/api.py
 
 docker-build:
 	docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) .

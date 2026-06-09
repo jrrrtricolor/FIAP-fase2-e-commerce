@@ -6,6 +6,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 
+from .categorical_store import CategoricalStore
+
 
 class FeaturePreprocessor:
     """Prepara variáveis para modelos de machine learning.
@@ -91,6 +93,7 @@ class FeaturePreprocessor:
         if self.categorical_columns:
             categorical_pipeline = Pipeline(
                 [
+                    ("categorical_store", CategoricalStore()),
                     ("imputer", SimpleImputer(strategy="most_frequent")),
                     (
                         "encoder",
@@ -106,7 +109,7 @@ class FeaturePreprocessor:
             )
 
         self.transformer = ColumnTransformer(transformers)
-        self.transformer.set_output(transform="pandas")
+        self.transformer = self.transformer.set_output(transform="pandas")
 
         return self.transformer
 
@@ -121,8 +124,8 @@ class FeaturePreprocessor:
         Exemplo:
             X_train_ready = preprocessor.fit_prepare(X_train)
         """
-        transformer = self.create_pipeline()
-        return transformer.fit_transform(X)
+        self.create_pipeline()
+        return self.transformer.fit_transform(X)
 
     def prepare(self, X: pd.DataFrame) -> pd.DataFrame:
         """Aplica nos novos dados o pipeline ajustado no treino.
