@@ -16,12 +16,16 @@ RUN pip install --upgrade pip \
 # Instalar somente as dependências necessárias para executar o projeto.
 RUN pip install \
     "colorama>=0.4.6,<0.5.0" \
+    "fastapi[standard]>=0.136.3,<0.137.0" \
     "kagglehub>=1.0.1,<2.0.0" \
     "matplotlib>=3.10.9,<4.0.0" \
     "mlflow>=3.7.0,<4.0.0" \
     "numpy>=2.4.6,<3.0.0" \
     "pandas>=2.3.3,<3.0.0" \
+    "prometheus-client>=0.25.0,<0.26.0" \
+    "prometheus-fastapi-instrumentator>=8.0.0,<9.0.0" \
     "protobuf>=3.20.0,<3.21.0" \
+    "python-json-logger>=4.0.0,<5.0.0" \
     "scikit-learn>=1.8.0,<2.0.0"
 
 COPY ml_prep_kit ./ml_prep_kit
