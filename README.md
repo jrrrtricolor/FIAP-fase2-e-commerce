@@ -112,7 +112,7 @@ make train-torch
 
 ## API
 
-Executar servidor de API
+Executar servidor de API:
 
 ```bash
 make run-server
@@ -123,6 +123,15 @@ Acessar:
 ```text
 http://localhost:8000/docs
 ```
+
+Endpoints principais:
+
+- `GET /health`: verifica se a API está ativa.
+- `GET /aisles`: lista os corredores conhecidos pelo modelo.
+- `GET /departments`: lista os departamentos conhecidos pelo modelo.
+- `POST /recomendacoes`: calcula o score de recomendação para produtos
+  candidatos.
+- `GET /metrics`: expõe métricas para Prometheus.
 
 ## MLflow
 
@@ -147,7 +156,7 @@ http://127.0.0.1:5001
 
 ## DVC
 
-O DVC está configurado em versão inicial.
+O DVC controla o pipeline principal do projeto.
 
 Verificar status:
 
@@ -166,6 +175,8 @@ Stages atuais:
 - `download_dataset`
 - `prepare_data`
 - `train_models`
+
+O arquivo `dvc.lock` registra o estado reproduzível desses estágios.
 
 ## Docker
 
@@ -188,10 +199,12 @@ Executar container:
 make docker-run
 ```
 
-Subir a interface do MLflow com Docker Compose:
+Subir serviços com Docker Compose:
 
 ```bash
+docker compose up api
 docker compose up mlflow
+docker compose up trainer
 ```
 
 Observação: é necessário ter o Docker daemon ativo.
@@ -218,5 +231,8 @@ Também possui GitHub Actions para:
 ## Limitações atuais
 
 - As métricas atuais ainda são principalmente métricas de classificação.
-- A rotina Top-N está disponível, mas ainda precisa ser conectada a uma API.
+- A API recebe produtos candidatos; ela ainda não gera candidatos
+  automaticamente.
+- A rotina Top-N está disponível para ordenar candidatos, mas ainda precisa de
+  métricas de ranking como Precision@K, Recall@K ou NDCG@K.
 - O deploy em cloud ainda não foi implementado.
