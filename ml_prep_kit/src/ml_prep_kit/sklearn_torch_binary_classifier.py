@@ -42,6 +42,7 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         batch_size: int = 512,
         random_seed: int = 42,
         threshold: float = 0.5,
+        model_module: nn.Module | None = None,
     ) -> None:
         """Guarda os hiperparâmetros usados no treino.
 
@@ -59,6 +60,8 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         self.batch_size = batch_size
         self.random_seed = random_seed
         self.threshold = threshold
+        self.model_module = model_module
+        self.is_fitted_ = False
 
     def fit(self, X, y):
         """Treina a rede neural com os dados informados.
@@ -66,6 +69,12 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         Exemplo:
             classificador.fit(X_treino, y_treino)
         """
+
+        if (self.is_fitted_):
+            raise ValueError(
+                "O modelo já foi treinado ou carregado."
+            )
+
         X_matriz = np.asarray(X, dtype=np.float32)
         y_vetor = np.asarray(y, dtype=np.float32)
 
@@ -99,7 +108,7 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         )
 
         logger.info(
-            "Iniciando treino do classificador PyTorch.",
+            "Iniciando o ajuste do classificador PyTorch.",
             extra={
                 "evento": "treino_classificador_pytorch_iniciado",
                 "linhas": len(X_matriz),
@@ -116,15 +125,18 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
                 funcao_perda=funcao_perda,
                 otimizador=otimizador,
             )
-            logger.info(
-                "Época do classificador PyTorch concluída.",
-                extra={
-                    "evento": "epoca_classificador_pytorch_concluida",
-                    "epoca": epoca,
-                    "total_epocas": self.epochs,
-                    "perda_treino": round(self.train_loss_, 6),
-                },
-            )
+            if epoca == 1 or epoca % 5 == 0 or epoca == self.epochs:
+                logger.info(
+                    "Treino PyTorch em andamento: época %s/%s.",
+                    epoca,
+                    self.epochs,
+                    extra={
+                        "evento": "epoca_classificador_pytorch_concluida",
+                        "epoca": epoca,
+                        "total_epocas": self.epochs,
+                        "perda_treino": round(self.train_loss_, 6),
+                    },
+                )
 
         self.classes_ = np.array([0, 1])
         self.n_features_in_ = quantidade_features
@@ -132,7 +144,7 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         self.model_module.eval()
 
         logger.info(
-            "Treino do classificador PyTorch finalizado.",
+            "Ajuste do classificador PyTorch finalizado.",
             extra={
                 "evento": "treino_classificador_pytorch_concluido",
                 "perda_treino_final": round(self.train_loss_, 6),
@@ -156,10 +168,18 @@ class SklearnTorchBinaryClassifier(ClassifierMixin, BaseEstimator):
         Exemplo:
             probabilidades = classificador.predict_proba(X_validacao)
         """
+        if self.is_fitted_ is False:
+            if self.model_module is None:
+                raise ValueError(
+                    "Modelo não treinado."
+                )
+
         X_matriz = np.asarray(X, dtype=np.float32)
         X_tensor = torch.tensor(X_matriz, dtype=torch.float32)
 
-        self.model_module.eval()
+        if self.is_fitted_:
+            self.model_module.eval()
+
         with torch.no_grad():
             # Sigmoid transforma a saída bruta em probabilidade positiva.
             logits = self.model_module(X_tensor)

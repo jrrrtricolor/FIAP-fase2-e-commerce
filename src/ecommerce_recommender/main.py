@@ -8,8 +8,6 @@ from colorama import Fore, Style, init
 
 from ecommerce_recommender import torch_training, training
 
-LOGGER = logging.getLogger("ecommerce_recommender.main")
-
 
 def main() -> None:
     """Executa os treinamentos e exibe uma tabela final.
@@ -43,13 +41,14 @@ def configure_console_logging() -> None:
         configure_console_logging()
     """
     handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(
-        logging.Formatter("%(levelname)s | %(name)s | %(message)s")
-    )
+    handler.setFormatter(logging.Formatter("%(levelname)s | %(message)s"))
 
     logging.getLogger().handlers.clear()
     logging.getLogger().addHandler(handler)
     logging.getLogger().setLevel(logging.INFO)
+
+    # Reduzir mensagens internas de bibliotecas para manter o terminal limpo.
+    logging.getLogger("mlflow").setLevel(logging.ERROR)
 
 
 def show_training_report(report: pd.DataFrame) -> None:
@@ -65,7 +64,7 @@ def show_training_report(report: pd.DataFrame) -> None:
 
     # Marcar o melhor modelo de acordo com a métrica definida.
     ordered_report["melhor_modelo"] = ""
-    ordered_report.loc[0, "melhor_modelo"] = "SIM"
+    ordered_report.loc[0, "melhor_modelo"] = "Sim"
 
     # Selecionar as colunas principais para leitura no terminal.
     display_columns = [
@@ -87,12 +86,12 @@ def show_training_report(report: pd.DataFrame) -> None:
         columns={
             "melhor_modelo": "Melhor",
             "model_name": "Modelo",
-            "accuracy": "Accuracy",
-            "precision": "Precision",
+            "accuracy": "Acurácia",
+            "precision": "Precisão",
             "recall": "Recall",
             "f1": "F1",
             "roc_auc": "ROC AUC",
-            "train_loss": "Train loss",
+            "train_loss": "Perda treino",
             "run_id": "Run ID",
         }
     )
@@ -118,8 +117,6 @@ def show_training_report(report: pd.DataFrame) -> None:
         )
     )
 
-    LOGGER.info("Tabela final gerada com sucesso.")
-
 
 def format_report_for_terminal(report: pd.DataFrame) -> pd.DataFrame:
     """Formata resultados para exibição no terminal.
@@ -129,12 +126,12 @@ def format_report_for_terminal(report: pd.DataFrame) -> pd.DataFrame:
     """
     report = report.copy()
     metric_columns = [
-        "Accuracy",
-        "Precision",
+        "Acurácia",
+        "Precisão",
         "Recall",
         "F1",
         "ROC AUC",
-        "Train loss",
+        "Perda treino",
     ]
 
     # Formatar métricas numéricas com quatro casas decimais.
@@ -169,7 +166,7 @@ def build_table(report: pd.DataFrame) -> str:
 
     for row in rows:
         line = build_row(row, widths)
-        if row[0] == "SIM":
+        if row[0] == "Sim":
             line = color_text(line, Fore.GREEN)
         lines.append(line)
 

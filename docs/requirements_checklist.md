@@ -104,6 +104,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Adicionar a dependência do DVC.
 - [x] Inicializar o DVC no projeto.
 - [x] Criar o arquivo `dvc.yaml`.
+- [x] Versionar o arquivo `dvc.lock`.
 - [x] Documentar como reproduzir o pipeline com DVC.
 - [x] Versionar o treino do modelo em versão inicial.
 - [x] Criar pelo menos três stages no pipeline.
@@ -131,7 +132,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Atualizar o README com os comandos do DVC.
 - [x] Atualizar o README com os comandos Docker.
 - [x] Criar o Model Card inicial do modelo.
-- [ ] Atualizar o Model Card com resultados finais.
+- [x] Atualizar o Model Card com resultados atuais.
 - [x] Criar um resumo da arquitetura da solução.
 - [ ] Criar o roteiro do vídeo final no formato STAR.
 
@@ -152,7 +153,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 | Clean code e estrutura | 15% | Em andamento |
 | Reprodutibilidade | 15% | Em andamento |
 | Docker | 15% | Atendido em versão local |
-| Pipeline DVC | 15% | Em andamento |
+| Pipeline DVC | 15% | Atendido em versão inicial |
 | Rede neural com PyTorch | 15% | Atendido em versão inicial |
 | MLflow e Model Registry | 10% | Atendido em versão inicial |
 | Vídeo STAR | 10% | Pendente |
@@ -160,7 +161,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 
 ## Próximos passos recomendados
 
-1. Comparar o modelo PyTorch com os baselines no MLflow.
+1. Investigar as métricas perfeitas antes da entrega final.
 2. Criar uma stage DVC separada para avaliação final, se necessário.
 3. Adicionar métricas de ranking.
 4. Preparar o roteiro do vídeo STAR.

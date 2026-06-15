@@ -10,17 +10,16 @@ from ecommerce_recommender.training import FEATURE_COLUMNS
 
 LOGGER = logging.getLogger("ecommerce_recommender.recommendation")
 
-
 def recommend_top_n(
-    model,
+    predictor,
     candidates: pd.DataFrame,
     top_n: int = 10,
-) -> pd.DataFrame:
+) -> (pd.DataFrame, pd.Series):
     """Ordena produtos candidatos e retorna o Top-N por usuário.
 
     Exemplo:
-        recommendations = recommend_top_n(
-            model=pipeline,
+        recommendations, probas = recommend_top_n(
+            predictor=model_predictor,
             candidates=candidate_data,
             top_n=10,
         )
@@ -29,7 +28,8 @@ def recommend_top_n(
     validate_candidates(candidates)
 
     # Calcular a probabilidade de recomendação para cada candidato.
-    scores = model.predict_proba(candidates[FEATURE_COLUMNS])[:, 1]
+    input = predictor.prepare_input(candidates[FEATURE_COLUMNS])
+    scores = predictor.predict_proba(input)[:, 1]
 
     # Criar a tabela final com usuário, produto e pontuação.
     recommendations = candidates[["user_id", "product_id"]].copy()
@@ -53,7 +53,7 @@ def recommend_top_n(
 
     return recommendations.groupby("user_id").head(top_n).reset_index(
         drop=True,
-    )
+    ), pd.Series(scores, index=candidates.index)
 
 
 def validate_candidates(candidates: pd.DataFrame) -> None:

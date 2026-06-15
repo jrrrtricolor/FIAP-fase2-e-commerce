@@ -93,7 +93,7 @@ def run_preparation() -> None:
         training_data,
         TABLE_NAME,
     )
-    save_market_prices(catalog)
+    save_market_prices()
 
     LOGGER.info(
         "Dados preparados com sucesso.",
@@ -227,18 +227,32 @@ def add_simple_features(
     return training_data[SELECTED_COLUMNS]
 
 
-def save_market_prices(catalog: pd.DataFrame) -> None:
+def save_market_prices() -> None:
     """Salva preços estimados no SQLite, quando o arquivo existir.
 
     Exemplo:
-        save_market_prices(catalog)
+        save_market_prices()
     """
     if not MARKET_PRICES_PATH.exists():
         return
 
-    # Salvar os preços estimados junto com o catálogo.
+    # O arquivo de preços é uma referência por categoria, não por produto.
     prices = pd.read_csv(MARKET_PRICES_PATH)
-    prices = prices.merge(catalog, on="product_id", how="left")
+    required_columns = {
+        "department",
+        "aisle",
+        "estimated_price_usd",
+        "unit",
+    }
+    missing_columns = required_columns.difference(prices.columns)
+
+    # Interromper quando a referência de preços estiver fora do formato.
+    if missing_columns:
+        raise ValueError(
+            "Arquivo de preços estimados sem colunas obrigatórias: "
+            f"{sorted(missing_columns)}."
+        )
+
     SQLiteDataFrameStore(DATABASE_PATH).save_dataframe(
         prices,
         "estimated_market_prices",

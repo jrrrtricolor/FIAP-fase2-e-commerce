@@ -1,6 +1,9 @@
 """Registro reutilizável de experimentos com MLflow."""
 
+import io
 import logging
+import warnings
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from typing import Any
 
@@ -75,7 +78,7 @@ class ExperimentTracker:
             )
         """
         logger.info(
-            "Iniciando registro do modelo no MLflow.",
+            "Registrando execução no MLflow.",
             extra={
                 "evento": "registro_sklearn_mlflow_iniciado",
                 "nome_execucao": run_name,
@@ -91,14 +94,21 @@ class ExperimentTracker:
             for artifact in artifacts or []:
                 mlflow.log_artifact(str(artifact))
 
-            mlflow.sklearn.log_model(
-                sk_model=model,
-                name=model_name,
-                registered_model_name=registered_model_name,
-            )
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "ignore",
+                    message="Saving scikit-learn models.*",
+                )
+                with redirect_stdout(io.StringIO()):
+                    with redirect_stderr(io.StringIO()):
+                        mlflow.sklearn.log_model(
+                            sk_model=model,
+                            name=model_name,
+                            registered_model_name=registered_model_name,
+                        )
 
             logger.info(
-                "Modelo registrado no MLflow com sucesso.",
+                "Registro concluído no MLflow.",
                 extra={
                     "evento": "registro_sklearn_mlflow_concluido",
                     "nome_execucao": run_name,
@@ -132,7 +142,7 @@ class ExperimentTracker:
             )
         """
         logger.info(
-            "Iniciando registro do modelo PyTorch.",
+            "Registrando rede neural no MLflow.",
             extra={
                 "evento": "registro_pytorch_mlflow_iniciado",
                 "nome_execucao": run_name,
@@ -148,16 +158,23 @@ class ExperimentTracker:
             for artifact in artifacts or []:
                 mlflow.log_artifact(str(artifact))
 
-            mlflow.pytorch.log_model(
-                pytorch_model=model,
-                name=model_name,
-                input_example=input_example,
-                serialization_format="pt2",
-                registered_model_name=registered_model_name,
-            )
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "ignore",
+                    message="The given buffer is not writable.*",
+                )
+                with redirect_stdout(io.StringIO()):
+                    with redirect_stderr(io.StringIO()):
+                        mlflow.pytorch.log_model(
+                            pytorch_model=model,
+                            name=model_name,
+                            input_example=input_example,
+                            serialization_format="pt2",
+                            registered_model_name=registered_model_name,
+                        )
 
             logger.info(
-                "Modelo PyTorch registrado com sucesso.",
+                "Rede neural registrada no MLflow.",
                 extra={
                     "evento": "registro_pytorch_mlflow_concluido",
                     "nome_execucao": run_name,
@@ -206,7 +223,7 @@ class ExperimentTracker:
             latest_version.version,
         )
         logger.info(
-            "Modelo promovido com sucesso.",
+            "Modelo promovido para produção.",
             extra={
                 "evento": "modelo_promovido_registry",
                 "nome_modelo_registrado": registered_model_name,

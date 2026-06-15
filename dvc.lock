@@ -1,0 +1,67 @@
+schema: '2.0'
+stages:
+  download_dataset:
+    cmd: poetry run python data/download_dataset.py
+    deps:
+    - path: data/download_dataset.py
+      hash: md5
+      md5: de2b7f395dfd6b2c431a402d861b389f
+      size: 3872
+    outs:
+    - path: data/raw/instacart
+      hash: md5
+      md5: d77454baf88d147d71467d57d34b898c.dir
+      size: 713369324
+      nfiles: 6
+  prepare_data:
+    cmd: poetry run python -m ecommerce_recommender.prepare_data
+    deps:
+    - path: data/raw/instacart
+      hash: md5
+      md5: d77454baf88d147d71467d57d34b898c.dir
+      size: 713369324
+      nfiles: 6
+    - path: data/reference/estimated_market_prices.csv
+      hash: md5
+      md5: cf787a5656238287546718f9fd008999
+      size: 9808
+    - path: ml_prep_kit/src/ml_prep_kit/sqlite_dataframe_store.py
+      hash: md5
+      md5: 2ce50c971446080b6e17fae7c8f35207
+      size: 3173
+    - path: src/ecommerce_recommender/prepare_data.py
+      hash: md5
+      md5: 02afe6e5048ad4807106604d39170495
+      size: 8927
+    outs:
+    - path: data/training_data.db
+      hash: md5
+      md5: de3c116a8e4b2b4b8a7fe2b18096404f
+      size: 23445504
+  train_models:
+    cmd: poetry run python -m ecommerce_recommender.main
+    deps:
+    - path: data/training_data.db
+      hash: md5
+      md5: de3c116a8e4b2b4b8a7fe2b18096404f
+      size: 23445504
+    - path: ml_prep_kit/src/ml_prep_kit
+      hash: md5
+      md5: fa00c10885ce324308e52c59278ed89f.dir
+      size: 131965
+      nfiles: 33
+    - path: src/ecommerce_recommender
+      hash: md5
+      md5: 5fc02d45a849c18b4b7ee3b7597916a1.dir
+      size: 105508
+      nfiles: 24
+    outs:
+    - path: mlflow.db
+      hash: md5
+      md5: e3850ce321d33f54bf8d1c5f0c613abc
+      size: 712704
+    - path: mlruns
+      hash: md5
+      md5: 6013c00ec476740824c80bf835990d7d.dir
+      size: 231014
+      nfiles: 23
