@@ -161,7 +161,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 
 ## Próximos passos recomendados
 
-1. Investigar as métricas perfeitas antes da entrega final.
+1. Revisar a separação entre treino e validação em versões futuras.
 2. Criar uma stage DVC separada para avaliação final, se necessário.
-3. Adicionar métricas de ranking.
+3. Automatizar a geração de candidatos para a API.
 4. Preparar o roteiro do vídeo STAR.
