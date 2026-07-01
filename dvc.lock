@@ -31,20 +31,20 @@ stages:
       size: 3173
     - path: src/ecommerce_recommender/prepare_data.py
       hash: md5
-      md5: 02afe6e5048ad4807106604d39170495
-      size: 8927
+      md5: d54d8165c0394f2743fe945955100d51
+      size: 15284
     outs:
     - path: data/training_data.db
       hash: md5
-      md5: de3c116a8e4b2b4b8a7fe2b18096404f
-      size: 23445504
+      md5: 6f8354adb19c09c8410d7afeb42f2906
+      size: 37543936
   train_models:
     cmd: poetry run python -m ecommerce_recommender.main
     deps:
     - path: data/training_data.db
       hash: md5
-      md5: de3c116a8e4b2b4b8a7fe2b18096404f
-      size: 23445504
+      md5: 6f8354adb19c09c8410d7afeb42f2906
+      size: 37543936
     - path: ml_prep_kit/src/ml_prep_kit
       hash: md5
       md5: fa00c10885ce324308e52c59278ed89f.dir
@@ -52,16 +52,16 @@ stages:
       nfiles: 33
     - path: src/ecommerce_recommender
       hash: md5
-      md5: 5fc02d45a849c18b4b7ee3b7597916a1.dir
-      size: 105508
+      md5: 0feb23042f93b491cc7ea5df35ff1f00.dir
+      size: 117406
       nfiles: 24
     outs:
     - path: mlflow.db
       hash: md5
-      md5: e3850ce321d33f54bf8d1c5f0c613abc
+      md5: 67a244b18a4ca271a4e036ad209ac664
       size: 712704
     - path: mlruns
       hash: md5
-      md5: 6013c00ec476740824c80bf835990d7d.dir
-      size: 231014
+      md5: e0c65764254f9d47c2f52d44c48c356a.dir
+      size: 487158
       nfiles: 23
