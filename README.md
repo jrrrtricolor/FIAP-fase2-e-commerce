@@ -233,6 +233,6 @@ Também possui GitHub Actions para:
 - As métricas atuais ainda são principalmente métricas de classificação.
 - A API recebe produtos candidatos; ela ainda não gera candidatos
   automaticamente.
-- A rotina Top-N está disponível para ordenar candidatos, mas ainda precisa de
-  métricas de ranking como Precision@K, Recall@K ou NDCG@K.
+- A rotina Top-N está disponível para ordenar candidatos, mas a API ainda
+  recebe a lista de candidatos pronta.
 - O deploy em cloud ainda não foi implementado.

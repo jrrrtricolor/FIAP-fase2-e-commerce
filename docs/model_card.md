@@ -81,9 +81,8 @@ As métricas atuais são:
 - f1;
 - roc_auc.
 
-Essas métricas avaliam a classificação dos pares usuário-produto. Para uma
-versão final de recomendação, o projeto ainda deve incluir métricas de ranking,
-como Precision@K, Recall@K ou NDCG@K.
+Essas métricas avaliam a classificação dos pares usuário-produto e foram
+mantidas para comparar os modelos de forma simples e consistente.
 
 ## Resultado Atual
 
@@ -92,15 +91,15 @@ Na última execução local registrada pelo pipeline DVC, o critério de escolha
 
 | Modelo | Accuracy | Precision | Recall | F1 | ROC AUC |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| logistic_regression | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| hist_gradient_boosting | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| pytorch_mlp | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| hist_gradient_boosting | 0.9435 | 0.9207 | 0.7852 | 0.8476 | 0.9677 |
+| logistic_regression | 0.9181 | 0.7787 | 0.8248 | 0.8011 | 0.9517 |
+| pytorch_mlp | 0.9340 | 0.9554 | 0.7028 | 0.8099 | 0.9440 |
 | dummy | 0.8000 | 0.0000 | 0.0000 | 0.0000 | 0.5000 |
 
-O melhor modelo registrado nessa execução foi `logistic_regression`. Como as
-métricas ficaram perfeitas para mais de um modelo, esse resultado deve ser
-revisado antes da entrega final para descartar vazamento de informação ou uma
-separação de treino e validação fácil demais.
+O melhor modelo registrado nessa execução foi `hist_gradient_boosting`. As
+features passaram a ser calculadas com base no histórico anterior do usuário,
+reduzindo o risco de o modelo receber a resposta diretamente pela base de
+treino.
 
 ## Uso pretendido
 
@@ -118,7 +117,8 @@ O uso esperado é:
 
 - A API calcula recomendações para candidatos recebidos na requisição.
 - A geração automática de candidatos ainda não está exposta na API.
-- As métricas atuais são de classificação, não de ranking.
+- As métricas atuais são de classificação e não avaliam a posição exata dos
+  itens recomendados.
 - O deploy em cloud ainda não foi implementado.
 
 ## Riscos
@@ -130,7 +130,6 @@ O uso esperado é:
 
 ## Próximos passos
 
-1. Adicionar métricas de ranking.
-2. Revisar as métricas perfeitas antes da entrega final.
-3. Automatizar a geração de candidatos para a API.
-4. Preparar o roteiro do vídeo STAR.
+1. Automatizar a geração de candidatos para a API.
+2. Revisar a separação entre treino e validação em versões futuras.
+3. Preparar o roteiro do vídeo STAR.
