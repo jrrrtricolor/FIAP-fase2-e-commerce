@@ -113,13 +113,25 @@ O uso esperado é:
 3. ordenar os produtos pelo score;
 4. recomendar os produtos mais bem posicionados.
 
-## Limitações
+## API e deploy em cloud
 
-- A API calcula recomendações para candidatos recebidos na requisição.
-- A geração automática de candidatos ainda não está exposta na API.
-- As métricas atuais são de classificação e não avaliam a posição exata dos
-  itens recomendados.
-- O deploy em cloud ainda não foi implementado.
+A API pública da solução está disponível em ambiente cloud na AWS:
+
+```text
+https://e-commerce.juhouse.com.br/docs
+```
+
+Ela recebe produtos candidatos, calcula o score de recomendação e retorna os
+itens mais relevantes para o usuário.
+
+Rotas principais:
+
+- `GET /aisles`: obter lista de corredores.
+- `GET /departments`: obter lista de departamentos.
+- `POST /recomendacoes`: gerar recomendações para os usuários.
+- `GET /metrics`: métricas de desempenho da API para Prometheus.
+- `GET /health`: verificar saúde da API.
+
 
 ## Riscos
 
@@ -132,4 +144,3 @@ O uso esperado é:
 
 1. Automatizar a geração de candidatos para a API.
 2. Revisar a separação entre treino e validação em versões futuras.
-3. Preparar o roteiro do vídeo STAR.
