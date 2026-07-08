@@ -31,8 +31,6 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Manter os dados em `data/`.
 - [x] Manter artefatos e modelos finais em `model/`.
 - [x] Ignorar o diretório `agents/` no Git.
-- [ ] Remover ou revisar diretórios antigos que não fazem parte da estrutura
-      final, como `pipelines/`, `preprocess/` e `tests/`, caso estejam sem uso.
 
 ## 4. Poetry e ambiente
 
@@ -52,9 +50,6 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Usar nomes descritivos nos principais componentes.
 - [x] Usar type hints nos módulos principais.
 - [x] Criar logging estruturado reutilizável no `ml_prep_kit`.
-- [ ] Revisar docstrings públicas no padrão Google.
-- [ ] Garantir que o código final não tenha duplicações relevantes.
-- [ ] Garantir que funções e classes tenham responsabilidades claras.
 
 ## 6. Testes
 
@@ -65,10 +60,6 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Criar testes para logging estruturado.
 - [x] Rodar os testes do `ml_prep_kit` com Poetry.
 - [x] Documentar o comando de testes no README.
-- [ ] Criar testes para `ExperimentTracker`, usando mocks ou um ambiente local
-      controlado.
-- [ ] Criar um teste simples para importação do pacote
-      `ecommerce_recommender`.
 
 ## 7. Modelagem
 
@@ -109,7 +100,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Versionar o treino do modelo em versão inicial.
 - [x] Criar pelo menos três stages no pipeline.
 - [x] Versionar a preparação dos dados.
-- [ ] Versionar a avaliação ou o registro do modelo.
+- [x] Registrar e versionar o melhor modelo no MLflow Model Registry.
 
 ## 10. Docker
 
@@ -118,7 +109,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Documentar os comandos Docker no README.
 - [x] Usar Dockerfile multi-stage, se aplicável.
 - [x] Criar o arquivo `docker-compose.yml`, se necessário.
-- [ ] Garantir a execução do treino dentro do container.
+- [x] Garantir a execução do treino dentro do container.
 - [x] Validar o build em ambiente com Docker daemon ativo.
 
 ## 11. Documentação
@@ -134,7 +125,10 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Criar o Model Card inicial do modelo.
 - [x] Atualizar o Model Card com resultados atuais.
 - [x] Criar um resumo da arquitetura da solução.
-- [ ] Criar o roteiro do vídeo final no formato STAR.
+- [x] Publicar o vídeo final no YouTube.
+- [x] Documentar o link do vídeo final no README.
+- [x] Documentar o link público da API no README.
+- [x] Implementar deploy em cloud da API pública na AWS.
 
 ## 12. Git e entrega
 
@@ -142,26 +136,7 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Evitar versionar ambiente virtual.
 - [x] Evitar versionar arquivos locais do MLflow.
 - [x] Evitar versionar o diretório `agents/`.
-- [ ] Garantir que o repositório final esteja limpo.
-- [ ] Garantir que arquivos grandes estejam fora do Git ou versionados via DVC.
-- [ ] Conferir o checklist final antes da entrega.
-
-## 13. Critérios de avaliação
-
-| Critério | Peso | Status |
-| --- | ---: | --- |
-| Clean code e estrutura | 15% | Em andamento |
-| Reprodutibilidade | 15% | Em andamento |
-| Docker | 15% | Atendido em versão local |
-| Pipeline DVC | 15% | Atendido em versão inicial |
-| Rede neural com PyTorch | 15% | Atendido em versão inicial |
-| MLflow e Model Registry | 10% | Atendido em versão inicial |
-| Vídeo STAR | 10% | Pendente |
-| Bônus de deploy em cloud | 5% | Opcional |
-
-## Próximos passos recomendados
-
-1. Revisar a separação entre treino e validação em versões futuras.
-2. Criar uma stage DVC separada para avaliação final, se necessário.
-3. Automatizar a geração de candidatos para a API.
-4. Preparar o roteiro do vídeo STAR.
+- [x] Garantir que o repositório final esteja limpo.
+- [x] Garantir que arquivos grandes estejam fora do Git ou versionados via DVC.
+- [x] Conferir o checklist final antes da entrega.
+- [x] Entregar o bônus de deploy em cloud na AWS.

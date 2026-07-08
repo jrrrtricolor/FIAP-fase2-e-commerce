@@ -71,6 +71,41 @@ Documentação da API:
 http://localhost:8000/docs
 ```
 
+Deploy em cloud da API na AWS:
+
+```text
+https://e-commerce.juhouse.com.br/docs
+```
+
+Rotas disponíveis na API:
+
+### aisles
+
+Endpoints relacionados à obtenção de informações sobre os corredores dos
+produtos.
+
+- `GET /aisles`: obter lista de corredores.
+
+### departments
+
+Endpoints relacionados à obtenção de informações sobre os departamentos dos
+produtos.
+
+- `GET /departments`: obter lista de departamentos.
+
+### recomendações
+
+Endpoints relacionados à geração de recomendações para os usuários.
+
+- `POST /recomendacoes`: gerar recomendações para os usuários.
+
+### default
+
+Endpoints de operação e observabilidade.
+
+- `GET /metrics`: métricas de desempenho da API para Prometheus.
+- `GET /health`: verificar saúde da API.
+
 ## Validação
 
 ```bash
@@ -119,10 +154,6 @@ docker compose up trainer
 
 - Checklist da entrega: `docs/requirements_checklist.md`
 - Model Card: `docs/model_card.md`
+- Vídeo STAR: `https://youtu.be/4Guhz0sKVVw`
+- Deploy em cloud da API na AWS: `https://e-commerce.juhouse.com.br/docs`
 - Enunciado: `docs/Tech Challenge Fase 02.pdf`
-
-## Limitações
-
-- A API recebe produtos candidatos prontos.
-- A geração automática de candidatos ainda não está exposta na API.
-- O deploy em cloud ainda não foi implementado.
