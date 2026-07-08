@@ -60,10 +60,6 @@ acompanha o status atual do projeto `fiap-fase2-ecommerce-recommender`.
 - [x] Criar testes para logging estruturado.
 - [x] Rodar os testes do `ml_prep_kit` com Poetry.
 - [x] Documentar o comando de testes no README.
-- [x] Criar testes para `ExperimentTracker`, usando mocks ou um ambiente local
-      controlado.
-- [x] Criar um teste simples para importação do pacote
-      `ecommerce_recommender`.
 
 ## 7. Modelagem
 
